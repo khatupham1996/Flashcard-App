@@ -12,6 +12,7 @@ import ToastContainer from "./components/ToastContainer";
 import AllCardsView from "./components/AllCardsView";
 import { initialFlashcards } from "./utils/flashcardsData";
 import logo from "../../assets/images/logo-small.svg";
+
 export default function StudyMode() {
   const [flashcards, setFlashcards] = useState(initialFlashcards);
   const [viewMode, setViewMode] = useState("study");
@@ -20,9 +21,11 @@ export default function StudyMode() {
   const [hideMastered, setHideMastered] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
+
   // Filter flashcards based on selected category
   const filteredFlashcards = useMemo(() => {
     let filtered = flashcards;
+    console.log(filtered);
     //filter by category
     if (selectedCategory !== "All Categories") {
       filtered = filtered.filter((card) => card.category === selectedCategory);
@@ -42,7 +45,8 @@ export default function StudyMode() {
 
   // Get current flashcard data
   const currentFlashcard = filteredFlashcards[currentCard - 1];
-  //Rest to first card when filters change
+
+  //Reset to first card when filters change
   useEffect(() => {
     if (
       filteredFlashcards.length > 0 &&
@@ -60,16 +64,21 @@ export default function StudyMode() {
   }, [currentCard, currentFlashcard, setMasteryLevel]);
 
   // Calculate statistics
-  const totalCards = flashcards.length;
-  const mastered = flashcards.filter((card) => card.mastery === 5).length;
-  const inProgress = flashcards.filter(
-    (card) => card.mastery > 0 && card.mastery < 5
-  ).length;
-  const notStarted = flashcards.filter((card) => card.mastery === 0).length;
+  const statistics = useMemo(() => {
+    return {
+      totalCards: flashcards.length,
+      mastered: flashcards.filter((card) => card.mastery === 5).length,
+      inProgress: flashcards.filter(
+        (card) => card.mastery > 0 && card.mastery < 5
+      ).length,
+      notStarted: flashcards.filter((card) => card.mastery === 0).length,
+    };
+  }, [flashcards]);
+  const { totalCards, mastered, inProgress, notStarted } = statistics;
 
   const shuffleCard = () => {
-    if (filteredFlashcards.length === 0) return; // FIXED
-    const randomIndex = Math.floor(Math.random() * filteredFlashcards.length); // FIXED
+    if (filteredFlashcards.length === 0) return;
+    const randomIndex = Math.floor(Math.random() * filteredFlashcards.length);
     setCurrentCard(randomIndex + 1);
     setShowAnswer(false);
   };
@@ -85,6 +94,7 @@ export default function StudyMode() {
     });
 
     setFlashcards(updatedFlashcards);
+
     const updatedCard = updatedFlashcards.find(
       (card) => card.id === currentFlashcard.id
     );
@@ -248,8 +258,8 @@ export default function StudyMode() {
                   setHideMastered={setHideMastered}
                   showCategoryDropdown={showCategoryDropdown}
                   setShowCategoryDropdown={setShowCategoryDropdown}
-                  selectedCategory={selectedCategory} // ADD THIS
-                  setSelectedCategory={setSelectedCategory} // ADD THIS
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
                   onEdit={() => addToast("Card updated successfully.")}
                   onDelete={handleDeleteCard}
                 />
