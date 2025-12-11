@@ -8,6 +8,7 @@ import EditForm from "../hooks/EditForm";
 import { useFlashcard } from "../context/FlashcardContext";
 import DeleteCard from "../hooks/DeleteCard";
 import CreateCardModal from "./CreateCardModal";
+import plusIcon from "../../../assets/images/icon-circle-plus.svg";
 AllCardsView.propTypes = {
   flashcards: PropTypes.arrayOf(
     PropTypes.shape({
@@ -81,7 +82,9 @@ export default function AllCardsView({
         onClick={handleShowForm}
         className="px-6 py-2.5 bg-yellow-400 text-gray-900 font-semibold rounded-full hover:bg-yellow-400 transition flex items-center justify-center gap-2 text-sm border border-black"
       >
-        <span className="text-base">➕</span>
+        <span className="text-base">
+          <img src={plusIcon} alt="plus icon" />
+        </span>
         {showForm ? "Create Card" : "Hide Card"}
       </button>
       {!showForm && <CreateCardModal onCreateCard={onCreateCard} />}

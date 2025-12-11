@@ -11,7 +11,7 @@ import StatisticsSidebar from "./components/StatisticsSidebar";
 import ToastContainer from "./components/ToastContainer";
 import AllCardsView from "./components/AllCardsView";
 import { initialFlashcards } from "./utils/flashcardsData";
-import logo from "../../assets/images/logo-small.svg";
+import Header from "./components/Header";
 
 export default function StudyMode() {
   const [flashcards, setFlashcards] = useState(initialFlashcards);
@@ -75,7 +75,7 @@ export default function StudyMode() {
     };
   }, [flashcards]);
   const { totalCards, mastered, inProgress, notStarted } = statistics;
-
+  // Shuffle card
   const shuffleCard = () => {
     if (filteredFlashcards.length === 0) return;
     const randomIndex = Math.floor(Math.random() * filteredFlashcards.length);
@@ -159,42 +159,7 @@ export default function StudyMode() {
     <div className="min-h-screen bg-gray-100 flex items-center p-3 sm:p-4 md:p-8">
       <div className="max-w-7xl mx-auto w-full">
         <div className="bg-orange-50 max-w-[1440px] min-h-[960px] px-8 md:px-32 py-4 rounded-3xl">
-          <div className="flex items-center justify-between gap-2 sm:gap-4 mb-4 sm:mb-6 md:mb-8">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-yellow-400 rounded-full flex items-center justify-center">
-                <span className="text-lg sm:text-xl">
-                  <img src={logo} alt="logo" />
-                </span>
-              </div>
-              <span className="text-lg sm:text-xl font-semibold text-gray-900">
-                Flashcard
-              </span>
-            </div>
-            <div className="border border-black p-1 rounded-full shadow-custom bg-gray-50">
-              <div className="flex gap-1">
-                <button
-                  className={`px-4 sm:px-6 py-2 font-semibold rounded-full transition text-sm sm:text-base ${
-                    viewMode === "study"
-                      ? "border border-black bg-yellow-300 text-gray-900 hover:bg-yellow-400"
-                      : "bg-transparent text-gray-700 hover:bg-gray-100"
-                  }`}
-                  onClick={() => setViewMode("study")}
-                >
-                  Study Mode
-                </button>
-                <button
-                  className={`px-4 sm:px-6 py-2 font-semibold rounded-full transition text-sm sm:text-base ${
-                    viewMode === "all"
-                      ? "border border-black bg-yellow-300 text-gray-900 hover:bg-yellow-400"
-                      : "bg-transparent text-gray-700 hover:bg-gray-100"
-                  }`}
-                  onClick={() => setViewMode("all")}
-                >
-                  All Cards
-                </button>
-              </div>
-            </div>
-          </div>
+          <Header setViewMode={setViewMode} viewMode={viewMode} />
           <div className="flex flex-col md:flex-row gap-3 sm:gap-4 md:gap-6">
             {/* Main Content */}
             <div className="flex-1 bg-white rounded-lg p-3 sm:p-4 md:p-8 border border-black shadow-custom">

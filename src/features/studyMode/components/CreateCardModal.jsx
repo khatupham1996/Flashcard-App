@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-
+import plusIcon from "../../../assets/images/icon-circle-plus.svg";
 CreateCardModal.propTypes = {
   onCreateCard: PropTypes.func.isRequired,
 };
@@ -65,7 +65,9 @@ export default function CreateCardModal({ onCreateCard }) {
           onClick={handleSubmit}
           className="px-6 py-2.5 bg-yellow-400 text-gray-900 font-semibold rounded-full hover:bg-yellow-400 transition flex items-center justify-center gap-2 text-sm border border-black"
         >
-          <span className="text-base ">➕</span>
+          <span className="text-base ">
+            <img src={plusIcon} alt="plus icon" />
+          </span>
           Create Card
         </button>
       </div>
