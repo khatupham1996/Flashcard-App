@@ -1,5 +1,5 @@
 import { MoreVertical } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import FlashcardFilters from "./FlashcardFilters";
 import FlashcardMenu from "./FlashcardMenu";
@@ -63,6 +63,29 @@ export default function AllCardsView({
     const masteryMatch = hideMastered ? card.mastery < 5 : true;
     return categoryMatch && masteryMatch;
   });
+
+  useEffect(() => {
+    const handleClose = (e) => {
+      const isMenuButton = e.target.closet("button");
+      const isMenu = e.target.closet(".flashcard-menu");
+      if (!isMenuButton && !isMenu) {
+        setOpenMenuId(null);
+      }
+    };
+    const handleEscape = (e) => {
+      if (e.key === "Escape") {
+        setOpenMenuId(null);
+      }
+    };
+    if (openMenuId) {
+      document.addEventListener("mousedown", handleClose);
+      document.addEventListener("keydown", handleEscape);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClose);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [openMenuId]);
 
   function handleShowForm() {
     setShowForm((prev) => !prev);

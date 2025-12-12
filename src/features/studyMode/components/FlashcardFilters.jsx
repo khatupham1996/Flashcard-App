@@ -2,6 +2,7 @@ import { Shuffle, ChevronRight } from "lucide-react";
 // import { categories } from "../utils/categories";
 import { initialFlashcards } from "../utils/flashcardsData";
 import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
 
 FlashcardFilters.propTypes = {
   hideMastered: PropTypes.bool.isRequired,
@@ -22,6 +23,23 @@ export default function FlashcardFilters({
   selectedCategory,
   setSelectedCategory,
 }) {
+  const dropDownRef = useRef(null);
+  useEffect(() => {
+    const handleClose = (e) => {
+      if (dropDownRef.current && !dropDownRef.current.contains(e.target)) {
+        setShowCategoryDropdown(false);
+      }
+      if (e.key === "Escape") {
+        setShowCategoryDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClose);
+    document.addEventListener("keydown", handleClose);
+    return () => {
+      document.removeEventListener("mousedown", handleClose);
+      document.removeEventListener("keydown", handleClose);
+    };
+  }, []);
   const handleCategorySelect = (categoryName) => {
     setSelectedCategory(categoryName);
     setShowCategoryDropdown(false);
@@ -49,7 +67,10 @@ export default function FlashcardFilters({
             />
           </button>
           {showCategoryDropdown && (
-            <div className="absolute top-full left-0 mt-2 w-full bg-white border border-black rounded-lg shadow-lg z-10 max-h-80 overflow-y-auto">
+            <div
+              className="absolute top-full left-0 mt-2 w-full bg-white border border-black rounded-lg shadow-lg z-10 max-h-80 overflow-y-auto"
+              ref={dropDownRef}
+            >
               {/* All Categories Option */}
               <button
                 onClick={handleAllCategories}

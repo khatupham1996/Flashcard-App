@@ -147,6 +147,13 @@ export default function StudyMode() {
     setFlashcards([...flashcards, newFlashcard]);
     addToast("Card created successfully!");
   };
+  // Handle Edit card
+  const handleEditCard = (updatedCard) => {
+    setFlashcards((prevCards) =>
+      prevCards.map((card) => (card.id === updatedCard.id ? updatedCard : card))
+    );
+    addToast("Card updated sucessfully.");
+  };
   // Handle delete card
   const handleDeleteCard = (cardId) => {
     setFlashcards((prevCards) =>
@@ -225,7 +232,7 @@ export default function StudyMode() {
                   setShowCategoryDropdown={setShowCategoryDropdown}
                   selectedCategory={selectedCategory}
                   setSelectedCategory={setSelectedCategory}
-                  onEdit={() => addToast("Card updated successfully.")}
+                  onEdit={handleEditCard}
                   onDelete={handleDeleteCard}
                 />
               )}
