@@ -1,6 +1,6 @@
 import { Shuffle, ChevronRight } from "lucide-react";
 // import { categories } from "../utils/categories";
-import { initialFlashcards } from "../utils/flashcardsData";
+// import { initialFlashcards } from "../utils/flashcardsData";
 import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
 
@@ -12,6 +12,15 @@ FlashcardFilters.propTypes = {
   onShuffle: PropTypes.func.isRequired,
   selectedCategory: PropTypes.string.isRequired,
   setSelectedCategory: PropTypes.func.isRequired,
+  flashcards: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      question: PropTypes.string.isRequired,
+      answer: PropTypes.string.isRequired,
+      category: PropTypes.string.isRequired,
+      mastery: PropTypes.number.isRequired,
+    })
+  ).isRequired,
 };
 
 export default function FlashcardFilters({
@@ -22,6 +31,7 @@ export default function FlashcardFilters({
   onShuffle,
   selectedCategory,
   setSelectedCategory,
+  flashcards,
 }) {
   const dropDownRef = useRef(null);
   useEffect(() => {
@@ -86,33 +96,32 @@ export default function FlashcardFilters({
               </button>
 
               {/* Individual Categories */}
-              {Array.from(
-                new Set(initialFlashcards.map((card) => card.category))
-              )
-                .sort()
-                .map((category) => {
-                  const categoryCount = initialFlashcards.filter(
-                    (card) => card.category === category
-                  ).length;
-                  return (
-                    <button
-                      key={category}
-                      onClick={() => handleCategorySelect(category)}
-                      className={`w-full flex items-center gap-3 px-3 sm:px-4 py-2 hover:bg-gray-50 cursor-pointer text-left ${
-                        selectedCategory === category
-                          ? "bg-yellow-50 font-semibold"
-                          : ""
-                      }`}
-                    >
-                      <span className="flex-1 text-gray-700 text-xs sm:text-sm md:text-base">
-                        {category}
-                      </span>
-                      <span className="text-gray-500 text-xs sm:text-sm">
-                        {categoryCount}
-                      </span>
-                    </button>
-                  );
-                })}
+              {flashcards &&
+                Array.from(new Set(flashcards.map((card) => card.category)))
+                  .sort()
+                  .map((category) => {
+                    const categoryCount = flashcards.filter(
+                      (card) => card.category === category
+                    ).length;
+                    return (
+                      <button
+                        key={category}
+                        onClick={() => handleCategorySelect(category)}
+                        className={`w-full flex items-center gap-3 px-3 sm:px-4 py-2 hover:bg-gray-50 cursor-pointer text-left ${
+                          selectedCategory === category
+                            ? "bg-yellow-50 font-semibold"
+                            : ""
+                        }`}
+                      >
+                        <span className="flex-1 text-gray-700 text-xs sm:text-sm md:text-base">
+                          {category}
+                        </span>
+                        <span className="text-gray-500 text-xs sm:text-sm">
+                          {categoryCount}
+                        </span>
+                      </button>
+                    );
+                  })}
             </div>
           )}
         </div>

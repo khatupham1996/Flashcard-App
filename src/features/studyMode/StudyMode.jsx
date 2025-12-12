@@ -195,6 +195,7 @@ export default function StudyMode() {
                     onShuffle={shuffleCard}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
+                    flashcards={flashcards}
                   />
 
                   {filteredFlashcards.length > 0 && currentFlashcard ? (
