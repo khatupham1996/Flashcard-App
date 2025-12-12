@@ -66,8 +66,8 @@ export default function AllCardsView({
 
   useEffect(() => {
     const handleClose = (e) => {
-      const isMenuButton = e.target.closet("button");
-      const isMenu = e.target.closet(".flashcard-menu");
+      const isMenuButton = e.target.closest("button");
+      const isMenu = e.target.closest(".flashcard-menu");
       if (!isMenuButton && !isMenu) {
         setOpenMenuId(null);
       }
