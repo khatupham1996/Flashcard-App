@@ -12,9 +12,19 @@ import ToastContainer from "./components/ToastContainer";
 import AllCardsView from "./components/AllCardsView";
 import { initialFlashcards } from "./utils/flashcardsData";
 import Header from "./components/Header";
+import {
+  loadFlashcardsFromStorage,
+  saveFlashcardsToStorage,
+} from "./utils/localStorage";
 
 export default function StudyMode() {
-  const [flashcards, setFlashcards] = useState(initialFlashcards);
+  // Load flashcards from localStorage on initial render
+  const [flashcards, setFlashcards] = useState(() => {
+    const stored = loadFlashcardsFromStorage();
+    return stored || initialFlashcards;
+  });
+  // const [flashcards, setFlashcards] = useState(initialFlashcards);
+
   const [viewMode, setViewMode] = useState("study");
   const [showAnswer, setShowAnswer] = useState(false);
   const [showCardMenu, setShowCardMenu] = useState(false);
@@ -61,7 +71,12 @@ export default function StudyMode() {
     if (currentFlashcard) {
       setMasteryLevel(currentFlashcard.mastery);
     }
-  }, [currentCard, currentFlashcard, setMasteryLevel]);
+  }, [currentCard, setMasteryLevel]);
+
+  // Save flashcards to localStorage whenever they change
+  useEffect(() => {
+    saveFlashcardsToStorage(flashcards);
+  }, [flashcards]);
 
   // Calculate statistics
   const statistics = useMemo(() => {
